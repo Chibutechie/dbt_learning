@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — [Your Name]</title>
+<meta name="description" content="Selected projects in data engineering, data analysis, and AI automation by [Your Name].">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   PORTFOLIO STYLESHEET
+   Theme: "data terminal" — dark, monospace-led, grounded in
+   the visual language of consoles, configs, and pipeline DAGs.
+
+   EDIT GUIDE
+   - Colors & fonts:        see :root below
+   - Spacing scale:         see :root --space-*
+   - Section-by-section:    search for the "== NAME ==" headers
+   ========================================================= */
+
+:root {
+  /* --- color tokens --- */
+  --bg: #0b0d11;
+  --bg-elevated: #0f1217;
+  --surface: #141821;
+  --surface-soft: #11141a;
+  --border: #242a35;
+  --border-soft: #1b202a;
+
+  --text: #e7e9ec;
+  --text-muted: #9aa1ad;
+  --text-dim: #5b626d;
+
+  --amber: #f5a623;
+  --amber-soft: rgba(245, 166, 35, 0.12);
+  --cyan: #4fd1c5;
+  --cyan-soft: rgba(79, 209, 197, 0.12);
+
+  --dot-red: #ff5f56;
+  --dot-yellow: #ffbd2e;
+  --dot-green: #27c93f;
+
+  /* --- type --- */
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-sans: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* --- spacing scale --- */
+  --space-1: 0.4rem;
+  --space-2: 0.8rem;
+  --space-3: 1.4rem;
+  --space-4: 2.2rem;
+  --space-5: 3.6rem;
+  --space-6: 5.6rem;
+
+  --radius: 8px;
+  --radius-sm: 4px;
+  --container: 1080px;
+}
+
+/* =========================================================
+   == RESET ==
+   ========================================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(245,166,35,0.06), transparent),
+    radial-gradient(ellipse 700px 500px at 100% 10%, rgba(79,209,197,0.05), transparent);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+a { color: inherit; text-decoration: none; }
+
+ul { list-style: none; }
+
+button { font: inherit; cursor: pointer; }
+
+h1, h2, h3, h4 { font-weight: 600; line-height: 1.2; }
+
+.mono { font-family: var(--font-mono); }
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  width: 100%;
+}
+
+main { flex: 1; }
+
+/* =========================================================
+   == TERMINAL CHROME / NAV ==
+   The whole site lives "inside" a terminal window. The top
+   bar mimics window chrome; the path shown is the page route.
+   ========================================================= */
+.term-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11, 13, 17, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.term-bar__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--space-2) var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.term-dots { display: flex; gap: 7px; flex-shrink: 0; }
+.term-dots span {
+  width: 10px; height: 10px; border-radius: 50%;
+  display: inline-block;
+}
+.term-dots span:nth-child(1) { background: var(--dot-red); }
+.term-dots span:nth-child(2) { background: var(--dot-yellow); }
+.term-dots span:nth-child(3) { background: var(--dot-green); }
+
+.term-path {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.term-path strong { color: var(--text-muted); font-weight: 500; }
+
+.term-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+}
+
+.term-nav a {
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+  position: relative;
+}
+.term-nav a:hover { color: var(--text); }
+.term-nav a.active { color: var(--amber); }
+.term-nav a.active::after {
+  content: "\258C";
+  margin-left: 4px;
+  animation: blink 1.1s steps(2, jump-none) infinite;
+}
+
+.nav-toggle {
+  display: none;
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* =========================================================
+   == BUTTONS ==
+   Styled like CLI flags / bracketed commands.
+   ========================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  padding: 0.75em 1.3em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+
+.btn--primary {
+  background: var(--amber);
+  color: #14110a;
+  border-color: var(--amber);
+  font-weight: 600;
+}
+.btn--primary:hover { background: #ffb747; }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+.btn--ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+.btn-row { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+
+/* =========================================================
+   == SECTION / EYEBROW ==
+   ========================================================= */
+section { padding: var(--space-6) 0; }
+section.tight { padding: var(--space-5) 0; }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  margin-bottom: var(--space-2);
+}
+.eyebrow::before { content: "$"; color: var(--text-dim); }
+
+h2.section-title {
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  margin-bottom: var(--space-4);
+}
+
+.section-lede {
+  color: var(--text-muted);
+  max-width: 640px;
+  margin-bottom: var(--space-4);
+}
+
+/* =========================================================
+   == HERO (home) ==
+   ========================================================= */
+.hero {
+  padding: var(--space-6) 0 var(--space-5);
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.hero__kicker {
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  margin-bottom: var(--space-2);
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  margin-bottom: var(--space-2);
+}
+.hero h1 span { color: var(--amber); }
+
+.hero__roles {
+  font-family: var(--font-mono);
+  color: var(--cyan);
+  font-size: 1.05rem;
+  margin-bottom: var(--space-3);
+}
+
+.hero__copy {
+  color: var(--text-muted);
+  max-width: 480px;
+  margin-bottom: var(--space-4);
+}
+
+/* terminal window card used for the typed boot sequence */
+.term-window {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 20px 60px -20px rgba(0,0,0,0.6);
+}
+.term-window__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--bg-elevated);
+}
+.term-window__title {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+.term-window__body {
+  padding: var(--space-3) var(--space-3) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  min-height: 210px;
+}
+.term-line { color: var(--text-muted); margin-bottom: 0.5em; }
+.term-line .prompt { color: var(--cyan); }
+.term-line .path { color: var(--text-dim); }
+.term-out { color: var(--text); margin: 0.2em 0 0.9em; white-space: pre-wrap; }
+.term-out strong { color: var(--amber); }
+.cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  background: var(--amber);
+  vertical-align: -2px;
+  animation: blink 1s steps(2, jump-none) infinite;
+}
+
+/* pipeline svg */
+.pipeline-wrap { display: flex; justify-content: center; }
+.flow-line {
+  stroke-dasharray: 6 6;
+  animation: flow 1.6s linear infinite;
+}
+@keyframes flow { to { stroke-dashoffset: -24; } }
+.pulse-dot { animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse {
+  0%, 100% { opacity: 0.55; r: 4; }
+  50% { opacity: 1; r: 5.5; }
+}
+.node-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+/* =========================================================
+   == STAT WIDGETS ==
+   ========================================================= */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+}
+.stat-card__num {
+  font-family: var(--font-mono);
+  font-size: 1.7rem;
+  color: var(--amber);
+}
+.stat-card__label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.3em;
+}
+.stat-card__bar {
+  margin-top: var(--space-2);
+  height: 4px;
+  background: var(--border-soft);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.stat-card__bar span {
+  display: block;
+  height: 100%;
+  background: var(--cyan);
+  border-radius: 2px;
+}
+
+/* =========================================================
+   == SKILL / STACK CARDS ==
+   ========================================================= */
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+.skill-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+.skill-card__icon {
+  font-family: var(--font-mono);
+  color: var(--cyan);
+  font-size: 0.8rem;
+  margin-bottom: var(--space-2);
+}
+.skill-card h3 { font-size: 1.05rem; margin-bottom: 0.5em; }
+.skill-card p { color: var(--text-muted); font-size: 0.92rem; margin-bottom: var(--space-3); }
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 0.5em; }
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  padding: 0.3em 0.65em;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   == PROJECTS ==
+   ========================================================= */
+.filter-row {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+.filter-btn {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.5em 0.9em;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+.filter-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+.filter-btn.active {
+  background: var(--amber-soft);
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  transition: transform 0.18s ease, border-color 0.18s ease;
+  display: flex;
+  flex-direction: column;
+}
+.project-card:hover { transform: translateY(-3px); border-color: var(--border); }
+
+.project-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-2);
+  gap: var(--space-2);
+}
+.project-card h3 { font-size: 1.1rem; }
+.project-card__tagline { color: var(--text-muted); font-size: 0.88rem; margin-bottom: var(--space-2); }
+
+.status-pill {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  white-space: nowrap;
+  padding: 0.25em 0.6em;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+.status-pill::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.status-pill--live { color: var(--cyan); background: var(--cyan-soft); }
+.status-pill--progress { color: var(--amber); background: var(--amber-soft); }
+
+.diff-list { font-family: var(--font-mono); font-size: 0.85rem; margin: var(--space-2) 0 var(--space-3); }
+.diff-list li { margin-bottom: 0.4em; padding-left: 1.2em; position: relative; color: var(--text-muted); }
+.diff-list li.add::before { content: "+"; color: var(--cyan); position: absolute; left: 0; }
+.diff-list li.del::before { content: "\2212"; color: var(--text-dim); position: absolute; left: 0; }
+
+.project-card__links {
+  margin-top: auto;
+  display: flex;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  padding-top: var(--space-2);
+}
+.project-card__links a { color: var(--text-muted); }
+.project-card__links a:hover { color: var(--amber); }
+.project-card__links a::before { content: "\2192 "; }
+
+/* =========================================================
+   == ABOUT: CONFIG BLOCK / GIT LOG ==
+   ========================================================= */
+.code-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  overflow-x: auto;
+}
+.code-block .k { color: var(--cyan); }
+.code-block .s { color: var(--amber); }
+.code-block .c { color: var(--text-dim); }
+.code-block .ln { color: var(--text-dim); margin-right: 1.2em; user-select: none; }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.bio p { color: var(--text-muted); margin-bottom: var(--space-3); }
+
+.gitlog { position: relative; padding-left: var(--space-4); }
+.gitlog::before {
+  content: "";
+  position: absolute;
+  left: 5px; top: 6px; bottom: 6px;
+  width: 1px;
+  background: var(--border);
+}
+.gitlog__item { position: relative; padding-bottom: var(--space-4); }
+.gitlog__item:last-child { padding-bottom: 0; }
+.gitlog__item::before {
+  content: "";
+  position: absolute;
+  left: -29px; top: 4px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--cyan);
+}
+.gitlog__meta {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: 0.3em;
+}
+.gitlog__meta .hash { color: var(--cyan); }
+.gitlog__title { font-weight: 600; margin-bottom: 0.4em; }
+.gitlog__item p { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 0.3em; }
+
+.edu-list li {
+  border-top: 1px solid var(--border-soft);
+  padding: var(--space-3) 0;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.edu-list li:first-child { border-top: none; }
+.edu-list .deg { font-weight: 600; }
+.edu-list .org { color: var(--text-muted); font-size: 0.92rem; }
+.edu-list .yr { font-family: var(--font-mono); color: var(--text-dim); font-size: 0.82rem; white-space: nowrap; }
+
+/* =========================================================
+   == CONTACT ==
+   ========================================================= */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-5);
+}
+
+.field { margin-bottom: var(--space-3); }
+.field label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-bottom: 0.5em;
+}
+.field input, .field textarea {
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.8em 0.9em;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  transition: border-color 0.15s ease;
+}
+.field input:focus, .field textarea:focus { border-color: var(--cyan); outline: none; }
+.field textarea { resize: vertical; min-height: 130px; }
+
+.contact-list { font-family: var(--font-mono); font-size: 0.92rem; }
+.contact-list li {
+  border-top: 1px solid var(--border-soft);
+  padding: var(--space-3) 0;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.contact-list li:first-child { border-top: none; }
+.contact-list .k { color: var(--text-dim); }
+.contact-list .v a:hover { color: var(--amber); }
+
+.avail-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--cyan);
+  background: var(--cyan-soft);
+  padding: 0.5em 0.9em;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-4);
+}
+.avail-badge .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--cyan);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+.form-status { font-family: var(--font-mono); font-size: 0.85rem; color: var(--cyan); margin-top: var(--space-2); min-height: 1.2em; }
+
+/* =========================================================
+   == FOOTER ==
+   ========================================================= */
+footer {
+  border-top: 1px solid var(--border-soft);
+  padding: var(--space-5) 0 var(--space-4);
+  margin-top: var(--space-5);
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+.footer-comment {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+.footer-links {
+  display: flex;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+.footer-links a { color: var(--text-muted); }
+.footer-links a:hover { color: var(--amber); }
+.footer-links a::before { content: "\2192 "; color: var(--text-dim); }
+
+/* =========================================================
+   == SCROLL REVEAL ==
+   ========================================================= */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+/* =========================================================
+   == RESPONSIVE ==
+   ========================================================= */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .skill-grid { grid-template-columns: 1fr; }
+  .project-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  :root { --space-6: 3.4rem; --space-5: 2.4rem; }
+  .container { padding: 0 var(--space-3); }
+  .term-nav {
+    display: none;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border-soft);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-2);
+  }
+  .term-nav.open { display: flex; }
+  .nav-toggle { display: inline-flex; }
+  .term-path strong { display: none; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .footer-inner { flex-direction: column; align-items: flex-start; }
+}
+
+/* =========================================================
+   == REDUCED MOTION ==
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  html { scroll-behavior: auto; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<div class="term-bar">
+  <div class="term-bar__inner">
+    <div class="term-dots"><span></span><span></span><span></span></div>
+    <div class="term-path"><strong>you@portfolio</strong>:~/projects</div>
+    <button class="nav-toggle" data-nav-toggle>[ menu ]</button>
+    <nav class="term-nav" data-nav>
+      <a href="index.html">~/home</a>
+      <a href="projects.html" class="active">~/projects</a>
+      <a href="about.html">~/about</a>
+      <a href="contact.html">~/contact</a>
+    </nav>
+  </div>
+</div>
+
+<main>
+  <section class="container reveal" style="padding-top: var(--space-6);">
+    <div class="eyebrow">ls ./projects</div>
+    <h2 class="section-title">Selected work</h2>
+    <p class="section-lede">
+      Six builds across data engineering, analysis, and AI automation. Each one
+      started as a real, specific problem — [replace these with your actual case studies].
+    </p>
+
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all">--all</button>
+      <button class="filter-btn" data-filter="data-eng">--data-engineering</button>
+      <button class="filter-btn" data-filter="analysis">--data-analysis</button>
+      <button class="filter-btn" data-filter="ai">--ai-automation</button>
+    </div>
+
+    <div class="project-grid">
+
+      <!-- 1 -->
+      <article class="project-card" data-category="data-eng">
+        <div class="project-card__top">
+          <h3>[Pipeline Project Name]</h3>
+          <span class="status-pill status-pill--live">deployed</span>
+        </div>
+        <p class="project-card__tagline">[A one-line tagline — what does this move or build, and for whom?]</p>
+        <div class="tag-row">
+          <span class="tag">Python</span><span class="tag">Airflow</span><span class="tag">dbt</span><span class="tag">Snowflake</span>
+        </div>
+        <ul class="diff-list">
+          <li class="del">problem: [the manual or broken process before this existed]</li>
+          <li class="add">impact: [what changed — time saved, scale reached, errors removed]</li>
+        </ul>
+        <div class="project-card__links">
+          <a href="#">github</a>
+          <a href="#">write-up</a>
+        </div>
+      </article>
+
+      <!-- 2 -->
+      <article class="project-card" data-category="data-eng">
+        <div class="project-card__top">
+          <h3>[Pipeline Project Name]</h3>
+          <span class="status-pill status-pill--progress">in progress</span>
+        </div>
+        <p class="project-card__tagline">[A one-line tagline for a second data engineering project.]</p>
+        <div class="tag-row">
+          <span class="tag">Spark</span><span class="tag">Kafka</span><span class="tag">Docker</span><span class="tag">AWS</span>
+        </div>
+        <ul class="diff-list">
+          <li class="del">problem: [what wasn't working at the source]</li>
+          <li class="add">impact: [the measurable result, even if still in progress]</li>
+        </ul>
+        <div class="project-card__links">
+          <a href="#">github</a>
+          <a href="#">live demo</a>
+        </div>
+      </article>
+
+      <!-- 3 -->
+      <article class="project-card" data-category="analysis">
+        <div class="project-card__top">
+          <h3>[Analysis Project Name]</h3>
+          <span class="status-pill status-pill--live">deployed</span>
+        </div>
+        <p class="project-card__tagline">[What question did this dashboard or report answer?]</p>
+        <div class="tag-row">
+          <span class="tag">SQL</span><span class="tag">Pandas</span><span class="tag">Tableau</span>
+        </div>
+        <ul class="diff-list">
+          <li class="del">problem: [the decision that was being made on guesswork]</li>
+          <li class="add">impact: [who uses this now and what it changed for them]</li>
+        </ul>
+        <div class="project-card__links">
+          <a href="#">github</a>
+          <a href="#">live demo</a>
+        </div>
+      </article>
+
+      <!-- 4 -->
+      <article class="project-card" data-category="analysis">
+        <div class="project-card__top">
+          <h3>[Analysis Project Name]</h3>
+          <span class="status-pill status-pill--live">deployed</span>
+        </div>
+        <p class="project-card__tagline">[A second analysis project — A/B test, cohort study, forecasting, etc.]</p>
+        <div class="tag-row">
+          <span class="tag">Python</span><span class="tag">Statistics</span><span class="tag">Power BI</span>
+        </div>
+        <ul class="diff-list">
+          <li class="del">problem: [what was unclear or contested before this analysis]</li>
+          <li class="add">impact: [the recommendation that shipped because of it]</li>
+        </ul>
+        <div class="project-card__links">
+          <a href="#">write-up</a>
+        </div>
+      </article>
+
+      <!-- 5 -->
+      <article class="project-card" data-category="ai">
+        <div class="project-card__top">
+          <h3>[AI Automation Project Name]</h3>
+          <span class="status-pill status-pill--live">deployed</span>
+        </div>
+        <p class="project-card__tagline">[What manual task does this agent or workflow now handle?]</p>
+        <div class="tag-row">
+          <span class="tag">LangChain</span><span class="tag">OpenAI API</span><span class="tag">n8n</span>
+        </div>
+        <ul class="diff-list">
+          <li class="del">problem: [the repetitive task someone used to do by hand]</li>
+          <li class="add">impact: [hours saved per week / accuracy / throughput]</li>
+        </ul>
+        <div class="project-card__links">
+          <a href="#">github</a>
+          <a href="#">live demo</a>
+        </div>
+      </article>
+
+      <!-- 6 -->
+      <article class="project-card" data-category="ai">
+        <div class="project-card__top">
+          <h3>[AI Automation Project Name]</h3>
+          <span class="status-pill status-pill--progress">in progress</span>
+        </div>
+        <p class="project-card__tagline">[A second AI project — a RAG assistant, a classification agent, etc.]</p>
+        <div class="tag-row">
+          <span class="tag">RAG</span><span class="tag">Vector DB</span><span class="tag">Python</span>
+        </div>
+        <ul class="diff-list">
+          <li class="del">problem: [what information was hard to find or act on]</li>
+          <li class="add">impact: [what it now retrieves, drafts, or decides]</li>
+        </ul>
+        <div class="project-card__links">
+          <a href="#">github</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="container">
+  <div class="footer-inner">
+    <div class="footer-comment">// © <span data-year></span> [Your Name]. All systems operational.</div>
+    <div class="footer-links">
+      <a href="mailto:EMAIL_PLACEHOLDER@example.com">email</a>
+      <a href="https://github.com/USERNAME_PLACEHOLDER">github</a>
+      <a href="https://linkedin.com/in/USERNAME_PLACEHOLDER">linkedin</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   PORTFOLIO JS
+   Small, dependency-free helpers for each page.
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  initNavToggle();
+  initFooterYear();
+  initScrollReveal();
+  initTypingHero();
+  initProjectFilter();
+  initContactForm();
+});
+
+/* ---------- mobile nav ---------- */
+function initNavToggle() {
+  const toggle = document.querySelector("[data-nav-toggle]");
+  const nav = document.querySelector("[data-nav]");
+  if (!toggle || !nav) return;
+  toggle.addEventListener("click", () => {
+    const open = nav.classList.toggle("open");
+    toggle.textContent = open ? "[ close ]" : "[ menu ]";
+  });
+}
+
+/* ---------- footer year ---------- */
+function initFooterYear() {
+  const el = document.querySelector("[data-year]");
+  if (el) el.textContent = new Date().getFullYear();
+}
+
+/* ---------- scroll reveal ---------- */
+function initScrollReveal() {
+  const items = document.querySelectorAll(".reveal");
+  if (!items.length) return;
+
+  if (!("IntersectionObserver" in window) ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    items.forEach((el) => el.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+  items.forEach((el) => observer.observe(el));
+}
+
+/* ---------- hero typing sequence (home page only) ---------- */
+function initTypingHero() {
+  const target = document.querySelector("[data-typer]");
+  if (!target) return;
+
+  // Each line: { prompt: "visitor@web:~$", text: "whoami", out: "..." }
+  let lines;
+  try {
+    lines = JSON.parse(target.getAttribute("data-typer"));
+  } catch (e) {
+    return;
+  }
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reduceMotion) {
+    target.innerHTML = lines
+      .map(
+        (l) =>
+          `<div class="term-line"><span class="prompt">${l.prompt}</span> ${l.text}</div>` +
+          (l.out ? `<div class="term-out">${l.out}</div>` : "")
+      )
+      .join("") + `<div class="term-line"><span class="prompt">visitor@web:~$</span> <span class="cursor"></span></div>`;
+    return;
+  }
+
+  target.innerHTML = "";
+  let lineIndex = 0;
+
+  function typeLine() {
+    if (lineIndex >= lines.length) {
+      const final = document.createElement("div");
+      final.className = "term-line";
+      final.innerHTML = `<span class="prompt">visitor@web:~$</span> <span class="cursor"></span>`;
+      target.appendChild(final);
+      return;
+    }
+
+    const { prompt, text, out } = lines[lineIndex];
+    const lineEl = document.createElement("div");
+    lineEl.className = "term-line";
+    const promptSpan = document.createElement("span");
+    promptSpan.className = "prompt";
+    promptSpan.textContent = prompt + " ";
+    const typedSpan = document.createElement("span");
+    lineEl.appendChild(promptSpan);
+    lineEl.appendChild(typedSpan);
+    target.appendChild(lineEl);
+
+    let charIndex = 0;
+    const speed = 28;
+
+    function typeChar() {
+      if (charIndex < text.length) {
+        typedSpan.textContent += text[charIndex];
+        charIndex++;
+        setTimeout(typeChar, speed);
+      } else {
+        if (out) {
+          const outEl = document.createElement("div");
+          outEl.className = "term-out";
+          outEl.innerHTML = out;
+          target.appendChild(outEl);
+        }
+        lineIndex++;
+        setTimeout(typeLine, 380);
+      }
+    }
+    typeChar();
+  }
+
+  typeLine();
+}
+
+/* ---------- project filter (projects page only) ---------- */
+function initProjectFilter() {
+  const buttons = document.querySelectorAll("[data-filter]");
+  const cards = document.querySelectorAll("[data-category]");
+  if (!buttons.length || !cards.length) return;
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      buttons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      const filter = btn.getAttribute("data-filter");
+
+      cards.forEach((card) => {
+        const match = filter === "all" || card.getAttribute("data-category") === filter;
+        card.style.display = match ? "" : "none";
+      });
+    });
+  });
+}
+
+/* ---------- contact form (contact page only) ----------
+   No backend here — on submit we open the visitor's mail
+   client with the message pre-filled. Replace EMAIL_PLACEHOLDER
+   in contact.html with your real address. For a form that
+   submits without opening email, wire this up to a service
+   like Formspree or Netlify Forms instead (see README.md).
+------------------------------------------------------------ */
+function initContactForm() {
+  const form = document.querySelector("[data-contact-form]");
+  if (!form) return;
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = form.querySelector("#name").value.trim();
+    const email = form.querySelector("#email").value.trim();
+    const message = form.querySelector("#message").value.trim();
+    const status = form.querySelector("[data-form-status]");
+    const to = form.getAttribute("data-to") || "";
+
+    const subject = encodeURIComponent(`Portfolio inquiry from ${name || "your site"}`);
+    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+
+    if (status) status.textContent = "> opening your email client…";
+  });
+}
+
+</script>
+</body>
+</html>
